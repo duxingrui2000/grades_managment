@@ -12,12 +12,9 @@ import java.util.Set;
 @Data
 public class TrainingProgram {
     @Id
-    private String id;
+    private Long id;
 
     @ManyToMany
-    private Set<Course> courses;
-
-    @OneToMany(mappedBy = "trainingProgram")
-    private Set<Student> students;
+    private Set<Subject> subjects;
 
 }

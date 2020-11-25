@@ -18,14 +18,11 @@ public class Student {
 
     Boolean gender;
 
-    @ManyToMany
-    @JoinTable(name = "student_course",
-            joinColumns = @JoinColumn(name = "sId"),
-            inverseJoinColumns = @JoinColumn(name = "courseId"))
-    Set<Course> selectedCourses;
+//    @OneToMany
+//    @JoinTable(name = "student_course")
+//    Set<StudentCourse> studentCourses;
 
     @ManyToOne
-    @JoinTable(name = "student_training")
     TrainingProgram trainingProgram;
 
 }

@@ -3,6 +3,7 @@ package org.database.grades.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -10,18 +11,18 @@ import java.util.Set;
  */
 @Entity
 @Data
-public class Course {
+public class Course implements Serializable {
     @Id
     Long courseId;
 
-    @Column(unique = true)
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
+    Subject subject;
+
     Integer classNumber;
 
-    @Column(length = 20)
-    String cName;
-
     @ManyToOne
-    @JoinColumn(name = "teacherId")
+    @JoinColumn(name = "teacher_id")
     Teacher teacher;
 
     Short credit;
@@ -30,6 +31,5 @@ public class Course {
 
     String requirement;
 
-    @ManyToMany(mappedBy = "courses")
-    Set<Student> students;
+
 }
