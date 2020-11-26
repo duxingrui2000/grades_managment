@@ -14,6 +14,8 @@ public class TrainingProgram {
     @Id
     private Long id;
 
+    private String name;
+
     @ManyToMany
     private Set<Subject> subjects;
 

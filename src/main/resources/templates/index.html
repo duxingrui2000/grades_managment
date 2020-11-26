@@ -13,27 +13,29 @@
 </head>
 
 <body class="text-center">
-<form class="form-signin" th:action="" method="post">
+<form class="form-signin" th:action="@{/login}" method="post">
     <img class="mb-4" th:src="@{/asserts/img/bootstrap-solid.svg}" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}"></h1>
+    <h1 class="h3 mb-3 font-weight-normal" th:text="请登录"></h1>
     <div class="alert alert-danger" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></div>
-    <input type="text" class="form-control" name="username" th:placeholder="#{login.username}" required="" autofocus="">
-    <input type="password" class="form-control" name="password" th:placeholder="#{login.password}" required="">
+    <input type="text" class="form-control" name="username" th:placeholder="用户名" required="" autofocus="">
+    <input type="password" class="form-control" name="password" th:placeholder="密码" required="">
+    <div class="radio">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="roleSelected" id="studentRadio" value="student"
+                   checked>
+            <label class="form-check-label" for="studentRadio">学生</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="roleSelected" id="teacherRadio" value="teacher">
+            <label class="form-check-label" for="teacherRadio">教师</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="roleSelected" id="adminRadio" value="admin">
+            <label class="form-check-label" for="adminRadio">管理员</label>
+        </div>
+    </div>
 
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="studentSelected" id="studentRadio" value="option1">
-        <label class="form-check-label" for="studentRadio">学生</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="teacherSelected" id="teacherRadio" value="option2">
-        <label class="form-check-label" for="teacherRadio">教师</label>
-    </div>
-    <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="adminSelected" id="adminRadio" value="option3">
-        <label class="form-check-label" for="adminRadio">管理员</label>
-    </div>
-
-    <button class="btn btn-lg btn-primary btn-block" type="submit">[[#{login.sign}]]</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
     <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
     <a class="btn btn-sm">中文</a>
     <a class="btn btn-sm">English</a>
