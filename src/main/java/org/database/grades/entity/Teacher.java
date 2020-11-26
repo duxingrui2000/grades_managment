@@ -9,11 +9,13 @@ import javax.persistence.OneToMany;
 
 @Data
 @Entity
-public class Teacher {
+public class Teacher{
     @Id
     Long teacherId;
 
+    String password;
+
     @Column(nullable = false)
-    String tName;
+    String teacherName;
 
 }
