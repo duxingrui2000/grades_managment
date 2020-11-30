@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,7 +26,8 @@ public class Course implements Serializable {
     @JoinColumn(name = "teacher_id")
     Teacher teacher;
 
-    Short credit;
+    @OneToMany(mappedBy = "course")
+    Set<StudentCourse> studentCourses;
 
     String announcement;
 

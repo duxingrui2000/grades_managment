@@ -23,7 +23,7 @@ public class Admin implements UserDetails {
         GrantedAuthority authority = new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return "admin";
+                return "ROLE_admin";
             }
         };
         return Collections.singleton(authority);

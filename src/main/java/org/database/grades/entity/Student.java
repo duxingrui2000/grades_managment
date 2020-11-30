@@ -8,18 +8,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
 public class Student implements UserDetails {
     @Id
+    @GeneratedValue
     Long studentId;
+
+    @Column(unique = true)
+    String username;
 
     String password;
 
     @Column(length = 15)
     String studentName;
+
+    @OneToMany(mappedBy = "student")
+    Set<StudentCourse> studentCourses;
 
     Boolean gender;
 
@@ -35,7 +43,7 @@ public class Student implements UserDetails {
         GrantedAuthority authority = new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return "student";
+                return "ROLE_student";
             }
         };
         return Collections.singleton(authority);

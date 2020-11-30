@@ -5,13 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("/teacher")
-@Secured("ROLE_teacher")
 public class TeacherController {
-    @RequestMapping("/hello")
+    @RequestMapping("/main")
     public String hello() {
-        return "hello teacher";
+        return "/teacher/main";
     }
 
 }

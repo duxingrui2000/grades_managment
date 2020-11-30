@@ -21,7 +21,9 @@ public class StudentCourse implements Serializable {
     @JoinColumn(name = "course_id")
     Course course;
 
-    Short score;
+    Short finalScore;
+    Short usualScore;
+    Short attendance;
 
     @Data
     public static class Key implements Serializable {

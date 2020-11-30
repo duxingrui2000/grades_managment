@@ -41,12 +41,12 @@ public class DetailsService implements UserDetailsService {
         String username = roleAndUsername[1];
         switch (role) {
             case "student":
-                Optional<Student> student = this.studentRepository.findById(Long.valueOf(s));
+                Optional<Student> student = this.studentRepository.findByUsername(username);
                 if (student.isEmpty())
                     throw new UsernameNotFoundException("该学生用户不存在！");
                 return student.get();
             case "teacher":
-                Optional<Teacher> teacher = this.teacherRepository.findById(Long.valueOf(username));
+                Optional<Teacher> teacher = this.teacherRepository.findByUsername(username);
                 if (teacher.isEmpty())
                     throw new UsernameNotFoundException("该教师用户不存在！");
                 return teacher.get();

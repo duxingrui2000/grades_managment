@@ -11,6 +11,7 @@ public class Subject {
     @Id
     Long subjectId;
 
+    Short credit;
 
     String subjectName;
 }

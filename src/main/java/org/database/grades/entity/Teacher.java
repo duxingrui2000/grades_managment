@@ -16,26 +16,26 @@ public class Teacher implements UserDetails {
     @GeneratedValue
     Long teacherId;
 
+    @Column(unique = true)
+    String username;
+
     String password;
 
     @Column(nullable = false)
     String teacherName;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         GrantedAuthority authority = new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return "teacher";
+                return "ROLE_teacher";
             }
         };
         return Collections.singleton(authority);
     }
 
-    @Override
-    public String getUsername() {
-        return teacherId.toString();
-    }
 
     @Override
     public boolean isAccountNonExpired() {
