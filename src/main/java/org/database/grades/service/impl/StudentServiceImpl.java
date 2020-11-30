@@ -19,7 +19,15 @@ public class StudentServiceImpl implements StudentService {
     CourseRepository courseRepository;
 
     @Override
-    public Student getStudent(Long studentId) throws Exception {
+    public Student getStudentByUsername(String studentUsername) throws Exception {
+        Optional<Student> student = this.studentRepository.findByUsername(studentUsername);
+        if (student.isEmpty())
+            throw new Exception();
+        return student.get();
+    }
+
+    @Override
+    public Student getStudentById(Long studentId) throws Exception {
         Optional<Student> student = this.studentRepository.findById(studentId);
         if (student.isEmpty())
             throw new Exception();

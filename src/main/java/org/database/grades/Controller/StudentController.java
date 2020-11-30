@@ -1,7 +1,9 @@
 package org.database.grades.Controller;
 
+import org.database.grades.entity.Student;
 import org.database.grades.entity.StudentCourse;
 import org.database.grades.service.CourseService;
+import org.database.grades.service.StudentCourseService;
 import org.database.grades.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/student")
@@ -22,11 +23,14 @@ public class StudentController {
     StudentService studentService;
 
     @Autowired
+    StudentCourseService studentCourseService;
+
+    @Autowired
     CourseService courseService;
 
-    private Long getCurrentStudentId() {
+    private String getCurrentStudentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return Long.valueOf(authentication.getName());
+        return authentication.getName();
     }
 
     @RequestMapping("/main")
@@ -37,7 +41,9 @@ public class StudentController {
     @GetMapping("/allCourses")
     public String showAllSelectedCourses(Model msg) {
         try {
-            Set<StudentCourse> allSelectedStudentCourses = this.studentService.getStudent(getCurrentStudentId()).getStudentCourses();
+            String username = getCurrentStudentUsername();
+            Student student = studentService.getStudentByUsername(getCurrentStudentUsername());
+            List<StudentCourse> allSelectedStudentCourses = student.getStudentCourses();
             List<List<String>> response = new ArrayList<>();
             for (var i : allSelectedStudentCourses) {
                 List<String> course = new ArrayList<>();
@@ -48,7 +54,7 @@ public class StudentController {
                 course.add(String.valueOf(i.getFinalScore() + i.getFinalScore()));//score
                 response.add(course);
             }
-            msg.addAttribute("info", response);
+            msg.addAttribute("sc_info", response);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package org.database.grades.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -27,17 +28,14 @@ public class Student implements UserDetails {
     String studentName;
 
     @OneToMany(mappedBy = "student")
-    Set<StudentCourse> studentCourses;
+    List<StudentCourse> studentCourses;
 
     Boolean gender;
-
-//    @OneToMany
-//    @JoinTable(name = "student_course")
-//    Set<StudentCourse> studentCourses;
 
     @ManyToOne
     TrainingProgram trainingProgram;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         GrantedAuthority authority = new GrantedAuthority() {
@@ -49,28 +47,27 @@ public class Student implements UserDetails {
         return Collections.singleton(authority);
     }
 
-    @Override
-    public String getUsername() {
-        return studentId.toString();
-    }
-
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

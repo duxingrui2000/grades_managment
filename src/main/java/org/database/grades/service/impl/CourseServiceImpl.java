@@ -4,6 +4,7 @@ import org.database.grades.entity.Course;
 import org.database.grades.entity.Student;
 import org.database.grades.entity.StudentCourse;
 import org.database.grades.repository.CourseRepository;
+import org.database.grades.repository.StudentCourseRepository;
 import org.database.grades.service.CourseService;
 import org.database.grades.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,15 @@ public class CourseServiceImpl implements CourseService {
     CourseRepository courseRepository;
 
     @Autowired
+    StudentCourseRepository studentCourseRepository;
+
+    @Autowired
     StudentService studentService;
 
     @Override
     public List<Course> findAllCoursesByStudentId(Long studentId) throws Exception {
-        Student student = studentService.getStudent(studentId);
-        Set<StudentCourse> studentCourses = student.getStudentCourses();
+        Student student = studentService.getStudentById(studentId);
+        List<StudentCourse> studentCourses = studentCourseRepository.findAllByStudent(student);
         List<Course> courses = new ArrayList<>();
         for(var i:studentCourses){
             courses.add(i.getCourse());

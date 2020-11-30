@@ -12,12 +12,13 @@ import java.util.Map;
 
 public interface StudentService {
     /**
-     *
      * @return 字符串形式的已选课程信息
      */
     public List<Course> getAllSelectedCourses(Long studentId) throws Exception;
 
     public List<Course> getAllUnfinishedCourses(Long studentId);
 
-    public Student getStudent(Long studentId) throws Exception;
+    public Student getStudentByUsername(String studentUsername) throws Exception;
+
+    public Student getStudentById(Long studentId) throws Exception;
 }
