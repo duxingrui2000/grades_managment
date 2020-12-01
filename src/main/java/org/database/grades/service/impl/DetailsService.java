@@ -6,11 +6,14 @@ import org.database.grades.entity.Teacher;
 import org.database.grades.repository.AdminRepository;
 import org.database.grades.repository.StudentRepository;
 import org.database.grades.repository.TeacherRepository;
+import org.database.grades.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +33,10 @@ public class DetailsService implements UserDetailsService {
 
     @Autowired
     AdminRepository adminRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -58,5 +65,23 @@ public class DetailsService implements UserDetailsService {
             default:
                 throw new UsernameNotFoundException("用户类型错误！");
         }
+    }
+
+    public void changePassword(String rawPassword) {
+        String encodePassword = "{bcrypt}" + passwordEncoder.encode(rawPassword);
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDetails.getClass().equals(Student.class)) {
+            ((Student) userDetails).setPassword(encodePassword);
+            studentRepository.save((Student) userDetails);
+        } else if (userDetails.getClass().equals(Teacher.class)) {
+            ((Teacher) userDetails).setPassword(encodePassword);
+            teacherRepository.save((Teacher) userDetails);
+        }
+    }
+
+    public boolean authenticate(String rawPassword) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String pureEncodePassword = userDetails.getPassword().replace("{bcrypt}", "");
+        return passwordEncoder.matches(rawPassword, pureEncodePassword);
     }
 }

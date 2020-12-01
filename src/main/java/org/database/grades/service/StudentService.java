@@ -21,4 +21,8 @@ public interface StudentService {
     public Student getStudentByUsername(String studentUsername) throws Exception;
 
     public Student getStudentById(Long studentId) throws Exception;
+
+    public boolean isCompulsory(Student student,Course course);
+
+    public void changePassword(Student student,String encodePassword);
 }

@@ -35,6 +35,17 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public boolean isCompulsory(Student student, Course course) {
+        return student.getTrainingProgram().getSubjects().contains(course.getSubject());
+    }
+
+    @Override
+    public void changePassword(Student student, String encodePassword) {
+        student.setPassword(encodePassword);
+        studentRepository.save(student);
+    }
+
+    @Override
     public List<Course> getAllSelectedCourses(Long studentId) throws Exception {
         return null;
     }

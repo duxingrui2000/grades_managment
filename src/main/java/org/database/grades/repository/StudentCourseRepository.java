@@ -11,4 +11,5 @@ import java.util.List;
 public interface StudentCourseRepository extends JpaRepository<StudentCourse,Long> {
     public List<StudentCourse> findAllByStudent(Student student);
 
+    public List<StudentCourse> findAllByStudentAndFinalScoreIsNotNull(Student student);
 }
