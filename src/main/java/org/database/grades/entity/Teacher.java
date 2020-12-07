@@ -1,29 +1,35 @@
 package org.database.grades.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.net.URLStreamHandlerFactory;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Teacher implements UserDetails {
     @Id
     @GeneratedValue
     Long teacherId;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     String username;
 
+    @Column(nullable = false)
     String password;
 
     @Column(nullable = false)
     String teacherName;
+
+    @OneToMany(mappedBy = "teacher")
+    Set<Course> courses;
 
     @JsonIgnore
     @Override

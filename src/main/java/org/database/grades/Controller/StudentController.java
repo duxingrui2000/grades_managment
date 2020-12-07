@@ -1,6 +1,5 @@
 package org.database.grades.Controller;
 
-import net.bytebuddy.asm.Advice;
 import org.database.grades.entity.Course;
 import org.database.grades.entity.Student;
 import org.database.grades.entity.StudentCourse;
@@ -9,24 +8,18 @@ import org.database.grades.service.CourseService;
 import org.database.grades.service.StudentCourseService;
 import org.database.grades.service.StudentService;
 import org.database.grades.service.impl.DetailsService;
-import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/student")
@@ -42,7 +35,7 @@ public class StudentController {
 
     @Autowired
     DetailsService detailsService;
-    
+
     //学生可以选择的课程
     List<Course> stuCanSelect = new ArrayList<>();
 
@@ -52,7 +45,32 @@ public class StudentController {
     }
 
     @RequestMapping("/main")
-    public String hello() {
+    public String hello(Model msg) {
+        try {
+            String username = getCurrentStudentUsername();
+            Student student = studentService.getStudentByUsername(getCurrentStudentUsername());
+            List<StudentCourse> studentCourses = studentCourseService.getAllStudentCourseByStudent(student);
+            //已选课程门数
+
+            //总学分
+            int totalCredit = 0;
+            double totalWeightedScore = 0;
+            for (var i : studentCourses) {
+                if (i.getFinalScore() != null && i.getFinalScore() != 0) {
+                    int credit = i.getCourse().getSubject().getCredit();
+                    totalCredit += credit;
+                    double weightedScore = credit * i.getFinalScore();
+                    totalWeightedScore += weightedScore;
+                }
+            }
+            msg.addAttribute("coursesNumber",studentCourses.size());
+            msg.addAttribute("totalCredit", totalCredit);
+            msg.addAttribute("averageScore", totalWeightedScore / totalCredit);
+            msg.addAttribute("trainProgram", student.getTrainingProgram().getName());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "/student/main";
     }
 
@@ -116,9 +134,9 @@ public class StudentController {
         }
         return "redirect:/student/main";
     }
-    
+
     @GetMapping("/showPassedCourses")
-    public String showPassedCourses(Model msg){
+    public String showPassedCourses(Model msg) {
         try {
             String username = getCurrentStudentUsername();
             Student student = studentService.getStudentByUsername(getCurrentStudentUsername());
@@ -139,47 +157,47 @@ public class StudentController {
                 course.add(i.getAttendance().toString());
                 course.add(i.getUsualScore().toString());
                 course.add(String.valueOf(i.getFinalScore()));//score
-                if(i.getFinalScore()>60){
+                if (i.getFinalScore() > 60) {
                     response1.add(course);
-                    credit_passed+=i.getCourse().getSubject().getCredit();
-                }else{
+                    credit_passed += i.getCourse().getSubject().getCredit();
+                } else {
                     response2.add(course);
-                    credit_failed+=i.getCourse().getSubject().getCredit();
+                    credit_failed += i.getCourse().getSubject().getCredit();
                 }
             }
             msg.addAttribute("sc_passed_info", response1);
             msg.addAttribute("sc_failed_info", response2);
-            msg.addAttribute("credit_passed",credit_passed);
-            msg.addAttribute("credit_failed",credit_failed);
+            msg.addAttribute("credit_passed", credit_passed);
+            msg.addAttribute("credit_failed", credit_failed);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "/student/show_passed_courses";
     }
-    
+
     @GetMapping("/showAllOptionalCourses")
-    public String showAllOptionalCourses(Model msg){
-        try{
+    public String showAllOptionalCourses(Model msg) {
+        try {
             String username = getCurrentStudentUsername();
             Student student = studentService.getStudentByUsername(getCurrentStudentUsername());
             List<StudentCourse> allSelectedStudentCourses = student.getStudentCourses();
             Long[] selectedCourseId = new Long[allSelectedStudentCourses.size()];
-            for (int i=0; i<allSelectedStudentCourses.size(); i++){
+            for (int i = 0; i < allSelectedStudentCourses.size(); i++) {
                 StudentCourse sc = allSelectedStudentCourses.get(i);
                 selectedCourseId[i] = sc.getCourse().getCourseId();
             }
             List<Course> courses = courseService.findAllCourses();
             List<List<String>> response = new ArrayList<>();
-            for (Course course:courses){
+            for (Course course : courses) {
                 boolean selectOrnot = false;
-                for(Long l:selectedCourseId){
-                    if(l.equals(course.getCourseId())){
+                for (Long l : selectedCourseId) {
+                    if (l.equals(course.getCourseId())) {
                         selectOrnot = true;
                         break;
                     }
                 }
                 //如果该生未选择该课程，则可以选择
-                if(!selectOrnot){
+                if (!selectOrnot) {
                     List<String> c = new ArrayList<>();
                     c.add(course.getSubject().getSubjectName()); //courseName
                     c.add(course.getSubject().getSubjectId().toString()); //subjectId
@@ -191,22 +209,22 @@ public class StudentController {
                     stuCanSelect.add(course);
                 }
             }
-            msg.addAttribute("allCourses",response);
-        }catch (Exception e){
+            msg.addAttribute("allCourses", response);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "/student/show_Optional_Courses";
     }
-    
+
     @PostMapping("/showAllOptionalCourses")
     public String selectAllOptionalCourses(@RequestParam("subjectId") String subjectId,
-                                           @RequestParam("classNum") String classNum){
-        try{
+                                           @RequestParam("classNum") String classNum) {
+        try {
             String username = getCurrentStudentUsername();
             Student student = studentService.getStudentByUsername(getCurrentStudentUsername());
-            for(var i:stuCanSelect){
-                if(i.getSubject().getSubjectId() == Integer.parseInt(subjectId)
-                        && i.getClassNumber() == Integer.parseInt(classNum)){
+            for (var i : stuCanSelect) {
+                if (i.getSubject().getSubjectId() == Integer.parseInt(subjectId)
+                        && i.getClassNumber() == Integer.parseInt(classNum)) {
                     Long courseId = i.getCourseId();
                     List<StudentCourse> sc = student.getStudentCourses();
                     StudentCourse studentCourse = new StudentCourse();
@@ -219,7 +237,7 @@ public class StudentController {
                     break;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "redirect:/student/showAllOptionalCourses";
