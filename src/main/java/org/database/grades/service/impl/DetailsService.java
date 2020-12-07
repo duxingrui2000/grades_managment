@@ -76,6 +76,9 @@ public class DetailsService implements UserDetailsService {
         } else if (userDetails.getClass().equals(Teacher.class)) {
             ((Teacher) userDetails).setPassword(encodePassword);
             teacherRepository.save((Teacher) userDetails);
+        }else if(userDetails.getClass().equals(Admin.class)){
+            ((Admin) userDetails).setPassword(encodePassword);
+            adminRepository.save((Admin)userDetails);
         }
     }
 

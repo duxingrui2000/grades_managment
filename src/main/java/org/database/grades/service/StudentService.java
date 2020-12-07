@@ -25,4 +25,7 @@ public interface StudentService {
     public boolean isCompulsory(Student student,Course course);
 
     public void changePassword(Student student,String encodePassword);
+    
+    public List<Student> getAllStudents() throws Exception;
+    public void EditStudentInfo(Student student)throws Exception;
 }

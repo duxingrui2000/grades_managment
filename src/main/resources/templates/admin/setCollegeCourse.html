@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>教师端首页</title>
+    <title>学院课程管理</title>
     <!-- Bootstrap core CSS -->
     <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -42,16 +42,53 @@
 </head>
 
 <body>
-<div th:replace="~{/common/teacher_commons::topbar}"></div>
+<div th:replace="~{/common/administrator_commons::topbar}"></div>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="~{common/teacher_commons::sidebar}"></div>
+        <div th:replace="~{common/administrator_commons::sidebar}"></div>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <h2>教师首页</h2>
+            <h2>学院课程管理</h2>
+            <div class="table-responsive">
+                <tr th:each="college:${collegeName}">
+                    <table class="table table-striped table-sm">
+                        <th style="font-size:15px;color:green" th:text="'学院号:'+ ${college.get(0)} +'---学院名称:'+${college.get(1)}"></th>
+                    </table>
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>课程号</th>
+                            <th>课程名</th>
+                            <th>学分</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="course:${collegeCourses}" th:if="${college.get(0)} eq ${course.get(0)}">
+                            <td th:text="${course.get(1)}"></td>
+                            <td th:text="${course.get(2)}"></td>
+                            <td th:text="${course.get(3)}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <form th:action="@{/admin/setCollegeCourse}" method="post">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="xyh"
+                                   th:value="${college.get(0)}" th:name="collegeId" placeholder="学院号">
+                            <label style="font-size:15px;color: green" for="yzkc">请为该学院添加预置课程的课程号</label>
+                            <input type="text" class="form-control" id="yzkc" th:name="subjectId"
+                                   placeholder="---预置课程---">
+                        </div>
+                        <button class="btn btn-primary" type="submit">提交</button>
+                    </form>
+                    <br> </br>
+                    <br> </br>
+                    </table>
+                </tr>
+            </div>
         </main>
     </div>
 </div>
-</div>
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

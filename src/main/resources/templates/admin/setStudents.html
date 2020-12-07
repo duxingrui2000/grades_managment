@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>教师端首页</title>
+    <title>教师名单</title>
     <!-- Bootstrap core CSS -->
     <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -42,16 +42,61 @@
 </head>
 
 <body>
-<div th:replace="~{/common/teacher_commons::topbar}"></div>
+<div th:replace="~{/common/administrator_commons::topbar}"></div>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="~{common/teacher_commons::sidebar}"></div>
+        <div th:replace="~{common/administrator_commons::sidebar}"></div>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <h2>教师首页</h2>
+            <h2>学生名单</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>登录名</th>
+                        <th>登录密码</th>
+                        <th>学院</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="student:${students}">
+                        <td th:text="${student.get(0)}"></td>
+                        <td th:text="${student.get(1)}"></td>
+                        <td th:text="${student.get(2)}"></td>
+                        <td th:text="${student.get(3)}"></td>
+                        <td th:text="${student.get(4)}"></td>
+                        <td th:text="${student.get(5)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <form th:action="@{/admin/setStudents}" method="post" onsubmit="alert('提交成功')">
+                    <div class="form-group">
+                        <label style="font-size:15px;color: red" for="xm">请输入姓名</label>
+                        <input type="text" class="form-control" id="xm" th:name="studentName"
+                               placeholder="---姓名---">
+                        <label style="font-size:15px;color: red" for="xb">请输入性别</label>
+                        <input type="text" class="form-control" id="xb" th:name="studentGender"
+                               placeholder="---性别---">
+                        <label style="font-size:15px;color: red" for="dlm">请设置登录名</label>
+                        <input type="text" class="form-control" id="dlm" th:name="userName"
+                               placeholder="---登录名--">
+                        <label style="font-size:15px;color: red" for="mm">请设置登录密码</label>
+                        <input type="text" class="form-control" id="mm" th:name="userPsw"
+                               placeholder="---登录密码--">
+                        <label style="font-size:15px;color: red" for="mm">请设置学院</label>
+                        <input type="text" class="form-control" id="xy" th:name="collegeName"
+                               placeholder="---学院--">
+                    </div>
+                    <button class="btn btn-primary" type="submit">提交</button>
+                </form>
+            </div>
         </main>
     </div>
 </div>
-</div>
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>教师端首页</title>
+    <title>学院管理</title>
     <!-- Bootstrap core CSS -->
     <link th:href="@{/asserts/css/bootstrap.min.css}" rel="stylesheet">
 
@@ -42,16 +42,41 @@
 </head>
 
 <body>
-<div th:replace="~{/common/teacher_commons::topbar}"></div>
+<div th:replace="~{/common/administrator_commons::topbar}"></div>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="~{common/teacher_commons::sidebar}"></div>
+        <div th:replace="~{common/administrator_commons::sidebar}"></div>
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <h2>教师首页</h2>
+            <h2>学院名单</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>院系号</th>
+                        <th>院名</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tp:${tp_list}">
+                        <td th:text="${tp.get(0)}"></td>
+                        <td th:text="${tp.get(1)}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <form th:action="@{/admin/setTrainingProgram}" method="post" >
+                    <div class="form-group">
+                        <label style="font-size:15px;color: red" for="ym">添加新学院--->请输入院名</label>
+                        <input type="text" class="form-control" id="ym" th:name="name"
+                               placeholder="---院名---">
+                    </div>
+                    <button class="btn btn-primary" type="submit">提交</button>
+                </form>
+            </div>
         </main>
     </div>
 </div>
-</div>
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
