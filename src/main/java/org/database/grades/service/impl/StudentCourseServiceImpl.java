@@ -1,6 +1,5 @@
 package org.database.grades.service.impl;
 
-import org.database.grades.entity.Course;
 import org.database.grades.entity.Student;
 import org.database.grades.entity.StudentCourse;
 import org.database.grades.repository.StudentCourseRepository;

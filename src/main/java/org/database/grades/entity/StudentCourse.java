@@ -1,6 +1,5 @@
 package org.database.grades.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
