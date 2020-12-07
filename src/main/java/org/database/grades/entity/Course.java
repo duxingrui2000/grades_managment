@@ -14,6 +14,7 @@ import java.util.Set;
 @Data
 public class Course implements Serializable {
     @Id
+    @GeneratedValue
     Long courseId;
 
     @ManyToOne
@@ -32,6 +33,5 @@ public class Course implements Serializable {
     String announcement;
 
     String requirement;
-
-
+    
 }

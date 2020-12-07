@@ -54,4 +54,15 @@ public class StudentServiceImpl implements StudentService {
     public List<Course> getAllUnfinishedCourses(Long studentId) {
         return null;
     }
+    
+    @Override
+    public List<Student> getAllStudents() throws Exception {
+        return studentRepository.findAll();
+    }
+    
+    @Override
+    public void EditStudentInfo(Student student) throws Exception {
+        studentRepository.save(student);
+        studentRepository.flush();
+    }
 }

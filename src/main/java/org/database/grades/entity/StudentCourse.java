@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Table(name = "student_course")
 public class StudentCourse implements Serializable {
     @Id
+    @GeneratedValue
     Long id;
 
 
