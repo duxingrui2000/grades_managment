@@ -72,6 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .permitAll();
 
+        http.logout()
+                .logoutUrl("/logout")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/index");
+
         http.authorizeRequests()
                 .antMatchers("/assert/**", "/index", "/login").permitAll()
                 .antMatchers("/admin/**").hasRole("admin")
